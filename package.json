@@ -1,6 +1,6 @@
 {
-  "name": "war3-model",
-  "version": "2.2.1",
+  "name": "war3-model-docs",
+  "version": "2.2.1-1",
   "description": "Warcraft 3 model parser, generator, convertor and previewer",
   "keywords": [
     "warcraft3",
@@ -25,7 +25,7 @@
   "scripts": {
     "prepublishOnly": "npm run build-lib",
     "prepare": "husky install",
-    
+    "do-publish": "npm publish --access public",
     "build-lib": "rm -rf dist && rollup --config rollup.config.ts --configPlugin typescript",
     "build-lib-watch": "rm -rf dist && rollup --config rollup.config.ts --configPlugin typescript --watch",
     "build-samples": "rm -rf docs/convert/dist docs/decodeblp/dist docs/preview/dist docs/optframes/dist && webpack-cli --config samples.webpack.config.js",
@@ -63,7 +63,7 @@
     "webpack-cli": "4.8.0"
   },
   "files": [
-    "dist/*"
+    "docs/*"
   ],
   "main": "dist/war3-model.js",
   "module": "dist/es/war3-model.js",

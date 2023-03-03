@@ -11,7 +11,8 @@ import * as monaco from 'monaco-editor';
 
 document.addEventListener('DOMContentLoaded', function init () {
     const container = document.querySelector('.container');
-    const save = document.querySelector('.save');
+    const saveMdx = document.querySelector('.save.mdx');
+    const saveMdl = document.querySelector('.save.mdl');
     const label = document.querySelector('.label');
     let dropTarget;
     let editor: monaco.editor.IStandaloneCodeEditor;
@@ -67,23 +68,39 @@ document.addEventListener('DOMContentLoaded', function init () {
         }
     });
 
-    save.addEventListener('click', function save (event) {
+    saveMdx.addEventListener('click', function save (event) {
         event.preventDefault();
 
-        let res: Blob;
+        // eslint-disable-next-line no-debugger
+        debugger;
 
-        if (isMDX) {
-            res = new Blob([generateMDL(model)], {type: 'octet/stream'});
-        } else {
-            res = new Blob([generateMDX(model)], {type: 'octet/stream'});
-        }
+        const res = new Blob([generateMDX(model)], {type: 'octet/stream'});
 
         const link = document.createElement('a');
         link.style.display = 'none';
         document.body.appendChild(link);
 
         link.href = URL.createObjectURL(res);
-        link.download = convertedName;
+        link.download = convertedName+'.mdx';
+        link.click();
+        URL.revokeObjectURL(link.href);
+        document.body.removeChild(link);
+    });
+
+    saveMdl.addEventListener('click', function save (event) {
+        event.preventDefault();
+
+        // eslint-disable-next-line no-debugger
+        debugger;
+
+        const res = new Blob([generateMDL(model)], {type: 'octet/stream'});
+
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        document.body.appendChild(link);
+
+        link.href = URL.createObjectURL(res);
+        link.download = convertedName+'.mdl';
         link.click();
         URL.revokeObjectURL(link.href);
         document.body.removeChild(link);
@@ -124,9 +141,10 @@ document.addEventListener('DOMContentLoaded', function init () {
         editor.setScrollTop(0, monaco.editor.ScrollType.Immediate);
         editor.trigger('war3-model', 'editor.foldLevel2', null);
 
-        convertedName = filename.replace(/\.md(x|l)/i, '.' + (isMDX ? 'mdl' : 'mdx'));
 
-        save.textContent = 'Save ' + convertedName;
+        convertedName = filename.replace(/\.md(x|l)/i, '');
+
+        // saveMdx.textContent = 'Save ' + convertedName;
     }
 
     function showError (err): void {
